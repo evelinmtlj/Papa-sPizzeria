@@ -8,7 +8,8 @@ public class GarlicKnots extends Product{
 
     @Override
     public double getPrice() {
-        return 0;
+        double pricePerItem = 1.50;
+        return pricePerItem * quantity;
     }
 
 
