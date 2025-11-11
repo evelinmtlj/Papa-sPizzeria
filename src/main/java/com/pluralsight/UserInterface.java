@@ -108,6 +108,28 @@ public class UserInterface {
         Pizza pizza = new Pizza(size,crust);
         //meats
         String[] meats = {"Pepperoni", "Sausage","Ham","Bacon","Chicken","Meatball"};
+        if(ConsoleHelper.promptForYesNo("Add meats?")) {
+            IntStream.range(0, meats.length)
+                    .filter(i->ConsoleHelper.promptForYesNo("Add " + meats[i] + "?"))
+                    .forEach(i->pizza.addMeatTopping(new Topping(meats[i], "meat", true)));
+        }
+
+        //cheeses
+        String[] cheeses = {"Mozzarella","Parmesan"," Ricotta","Goat Cheese","Buffalo"};
+        if(ConsoleHelper.promptForYesNo("Add cheeses?")) {
+            IntStream.range(0,cheeses.length)
+                    .filter(i->ConsoleHelper.promptForYesNo("Add " + cheeses[i] + "?"))
+                    .forEach(i-> pizza.addCheeseTopping(new Topping(cheeses[i],"cheese",true)));
+        }
+
+        //regular toppings
+        String[] regulars = {"Onions","Mushrooms","Bell Peppers","Olives","Tomatoes","Spinach",
+        "Basil","Pineapple","Anchovies"};
+        if(ConsoleHelper.promptForYesNo("Add regular toppings?")){
+            IntStream.range(0, regulars.length)
+                    .filter(i->ConsoleHelper.promptForYesNo("Add" + regulars[i] + "?"))
+                    .forEach(i-> pizza.addRegularTopping(new Topping(regulars[i],"regular", false)));
+        }
 
 
     }
