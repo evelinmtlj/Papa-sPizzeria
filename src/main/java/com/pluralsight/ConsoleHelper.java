@@ -112,6 +112,21 @@ while(true) {
     }
 }
         }
+
+        public static boolean promptForYesNo (String message) {
+            while (true) {
+                System.out.println(message + " (y/n): ");
+                String input = scanner.nextLine().trim().toLowerCase();
+
+                if(input.equals("y") || input.equals("yes")) {
+                    return true;
+                } else if (input.equals("n") || input.equals("no")) {
+                    return false;
+                } else {
+                    System.out.println("Invalid input. Please enter y or n");
+                }
+            }
+        }
     }
 
 
