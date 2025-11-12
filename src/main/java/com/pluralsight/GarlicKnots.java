@@ -2,8 +2,8 @@ package com.pluralsight;
 
 public class GarlicKnots extends Product{
 
-    public GarlicKnots(String size, int quantity, double price, String description) {
-        super(size, quantity, price, description);
+    public GarlicKnots(int quantity) {
+        super("One size",quantity,1.50,"Garlic knots");
     }
 
     @Override
