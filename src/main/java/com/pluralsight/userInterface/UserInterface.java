@@ -5,6 +5,7 @@ import com.pluralsight.pizza.Crust;
 import com.pluralsight.pizza.Sauce;
 import com.pluralsight.pizza.Topping;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -90,87 +91,119 @@ public class UserInterface {
     private void addPizza() {
         System.out.println("***** Build your own ******");
 
-        //build array of sizes
-        String[] sizes = {"Personal 8", "Medium 12", "Large 16"};
-        double [] sizePrices = {8.50,12.00,16.50};
-       // String[] sizeNames = {"Personal", "Medium", "Large"}; //for internal
+//pizza base
+        IntStream.range(0, Pizza.pizzaSize.length)
+                .forEach(i -> System.out.println((i + 1) + " - " + Pizza.pizzaSize[i]));
 
-        IntStream.range(0, sizes.length)
-                .forEach(i -> System.out.println((i + 1) + " - " + sizes[i]));
+        int sizeOption = ConsoleHelper.promptForInt("ENTER OPTION");
+        if (sizeOption < 1 || sizeOption > Pizza.pizzaSize.length) sizeOption = 1; //default to personal
 
-        int sizeOption = ConsoleHelper.promptForInt("Enter option");
-        if (sizeOption < 1 || sizeOption > sizes.length) sizeOption = 1; //default to personal
-
-        String size = sizes[sizeOption-1];
-        double pizzaPrice = sizePrices[sizeOption-1];
+        String size = Pizza.pizzaSize[sizeOption-1];
+        double pizzaPrice = Pizza.pizzaPrice[sizeOption-1];
 
         //crust
-        String[] crusts = {" Thin", " Regular", " Thick", " Cauliflower"};
-        IntStream.range(0, crusts.length)
-                .forEach(i -> System.out.println((i + 1) + " - " + crusts[i]));
-        int crustOption = ConsoleHelper.promptForInt("Choose crust");
-        if (crustOption < 1 || crustOption > crusts.length) crustOption = 2; //defaul to regular
-        Crust crust = new Crust(crusts[crustOption - 1]);
-        System.out.println("Your crust is: " + crusts[crustOption - 1]);
+
+        IntStream.range(0, Crust.crustType.length)
+                .forEach(i -> System.out.println((i + 1) + " - " + Crust.crustType[i]));
+        int crustOption = ConsoleHelper.promptForInt("ENTER CRUST TYPE");
+        if (crustOption < 1 || crustOption > Crust.crustType.length) crustOption = 2; //default to regular
+        Crust crust = new Crust(Crust.crustType[crustOption - 1]);
+        System.out.println("Your crust is: " + Crust.crustType[crustOption - 1]);
 
         //create a pizza
         Pizza pizza = new Pizza(size, crust,pizzaPrice);
+
         //meats
-        String[] meats = {"Pepperoni", "Sausage", "Ham", "Bacon", "Chicken", "Meatball"};
-        if (ConsoleHelper.promptForYesNo("Add meats?")) {
-            IntStream.range(0, meats.length)
-                    .filter(i -> ConsoleHelper.promptForYesNo("Add " + meats[i] + "?"))
-                    .forEach(i -> pizza.addMeatTopping(new Topping(meats[i], "meat", true)));
+        if (ConsoleHelper.promptForYesNo("ADD MEATS ?")) {
+            System.out.println("****** AVAILABLE MEATS *********");
+            IntStream.range(0, Pizza.meats.length)
+                    .forEach(i -> System.out.println((i+1) + " - " + Pizza.meats[i]));
+
+            while (true) {
+                int choice = ConsoleHelper.promptForInt(("Enter meat type (0 when you're done"));
+                if (choice == 0) break;
+                if(choice <1 || choice > Pizza.meats.length){
+                    System.out.println("Meat type not found please try again");
+                    continue;
+                }
+                String meatName = Pizza.meats[choice-1];
+                pizza.addMeatTopping(new Topping(meatName,"meats",false));
+                System.out.println(meatName + " has been added");
+            }
         }
         //sauces
 
-
         //cheeses
-        String[] cheeses = {"Mozzarella", "Parmesan", " Ricotta", "Goat Cheese", "Buffalo"};
-        if (ConsoleHelper.promptForYesNo("Add cheeses?")) {
-            IntStream.range(0, cheeses.length)
-                    .filter(i -> ConsoleHelper.promptForYesNo("Add " + cheeses[i] + "?"))
-                    .forEach(i -> pizza.addCheeseTopping(new Topping(cheeses[i], "cheese", true)));
-        }
+        if (ConsoleHelper.promptForYesNo("Add cheese?")) {
+            System.out.println("\n ******** AVAILABLE CHEESE TYPES *********");
+
+            //display cheese with numbers
+            IntStream.range(0, Pizza.cheeseTypes.length)
+                    .forEach(i -> System.out.println((i+1) + " - " + Pizza.cheeseTypes[i]));
+            while(true) {
+                int choice = ConsoleHelper.promptForInt(("Enter cheese type (0 when you're done"));
+                if(choice ==0) break;
+                if(choice<1 || choice > Pizza.cheeseTypes.length) {
+                    System.out.println("Cheese type not found please try again");
+                    continue;
+                }
+                String cheeseName = Pizza.cheeseTypes[choice - 1];
+                pizza.addCheeseTopping(new Topping(cheeseName, "regular", false));
+                System.out.println(cheeseName + " has been added ");
+            }
+
+                    // prompt use to select cheeses by number
+//            String input = ConsoleHelper.promptForString("ENTER THE NUMBER OF CHEESE TYPE YOU WANT: USE COMMA TO ADD MORE");
+//               for(String s: input.split(",")){
+//                   int n = Integer.parseInt(s.trim());
+//                   if(n >= 1 && n <= Pizza.cheeseTypes.length) {
+//                       pizza.addCheeseTopping(new Topping(Pizza.cheeseTypes[n-1],"cheese",true));
+//                   }
+//               }
+//            for(int i =0; i < Pizza.cheeseTypes.length; i++) {
+//                System.out.println((i+1) + " - "+ Pizza.cheeseTypes[i]);
+            }
+//
+//                    .filter(i -> ConsoleHelper.promptForYesNo("Add " + Pizza.cheeseTypes[i] + "?"))
+//
 
         //regular toppings
-        String[] regulars = {"Onions", "Mushrooms", "Bell Peppers", "Olives", "Tomatoes", "Spinach",
-                "Basil", "Pineapple", "Anchovies"};
         if (ConsoleHelper.promptForYesNo("Add regular toppings?")) {
-            System.out.println("\nAvailable regular toppings:");
-            for (int i = 0; i < regulars.length; i++) {
+            System.out.println("\n********** AVAILABLE TOPPINGS ********");
+            for (int i = 0; i < Topping.regulars.length; i++) {
+                System.out.println((i + 1) + " - " + Topping.regulars[i]);
             }
             while (true) {
-                int choice = ConsoleHelper.promptForInt("Enter topping number (0 when you're done):");
+                int choice = ConsoleHelper.promptForInt("Enter topping number (0 when you're done)");
 
                 if (choice == 0) break; //when customer is done
-                if (choice < 1 || choice > regulars.length) {
+                if (choice < 1 || choice > Topping.regulars.length) {
                     System.out.println("Topping not found please try again");
                     continue;
                 }
 
-                String toppingName = regulars[choice - 1];
+                String toppingName = Topping.regulars[choice - 1];
                 pizza.addRegularTopping(new Topping(toppingName, "regular", false));
                 System.out.println(toppingName + " has been added ");
             }
         }
 
         //Sauces
-        String[] sauces = {"Marinara", "Alfredo", "Pesto", "BBQ", "Buffalo", "Olive oil"};
+
         if (ConsoleHelper.promptForYesNo("Add sauces?")) {
-            System.out.println("\nAvailable sauces");
-            for (int i = 0; i < sauces.length; i++) {
-                System.out.println((i + 1) + " - " + sauces[i]);
+            System.out.println("\nAVAILABLE SAUCES ");
+            for (int i = 0; i < Sauce.sauceOptions.length; i++) {
+                System.out.println((i + 1) + " - " + Sauce.sauceOptions[i]);
             }
             while (true) {
                 int choice = ConsoleHelper.promptForInt("Enter sauce number (0 when you're done)");
 
                 if (choice == 0) break;
-                if (choice < 1 || choice > sauces.length) {
+                if (choice < 1 || choice > Sauce.sauceOptions.length) {
                     System.out.println("Sauce not found. Please try again");
                     continue;
                 }
-                String sauceName = sauces[choice - 1];
+                String sauceName = Sauce.sauceOptions[choice - 1];
                 pizza.addSauce(new Sauce(sauceName));
                 System.out.println(sauceName + " has been added!");
             }
@@ -191,18 +224,15 @@ public class UserInterface {
         private void addDrink () {
             System.out.println("***** Add a drink ******");
 
-            String[] drinks = {"Small", "Medium", "Large"};
-            double[] prices = {2.00, 2.50, 3.00};
-
-            IntStream.range(0, drinks.length) //creates range from 0-2
-                    .forEach(i -> System.out.println((i + 1) + " - " + drinks[i] + " $" + prices[i]));
+            IntStream.range(0, Drink.drinkSize.length) //creates range from 0-2
+                    .forEach(i -> System.out.println((i + 1) + " - " + Drink.drinkSize[i] + " $" + Drink.priceDrink[i]));
             int drinkChoice = ConsoleHelper.promptForInt("Enter drink choice");
-            if (drinkChoice < 1 || drinkChoice > drinks.length) drinkChoice = 1;
+            if (drinkChoice < 1 || drinkChoice > Drink.drinkSize.length) drinkChoice = 1;
 
-            Drink drink = new Drink(drinks[drinkChoice - 1], 1, prices[drinkChoice - 1], "Drink");
+            Drink drink = new Drink(Drink.drinkSize[drinkChoice - 1], 1, Drink.priceDrink[drinkChoice - 1], "Drink");
             order.addProduct(drink);
 
-            System.out.println(drinks[drinkChoice - 1] + "drink added to your order");
+            System.out.println(Drink.drinkSize[drinkChoice - 1] + "drink added to your order");
 
         }
         private void addGarlicKnots () {
