@@ -1,4 +1,4 @@
-package com.pluralsight;
+package com.pluralsight.pizza;
 
 public class Crust {
     private String name;
@@ -6,10 +6,10 @@ public class Crust {
     private double extraPrice;
 
 
-    public Crust(String name, boolean isStuffed, double extraPrice) {
+    public Crust(String name) {
         this.name = name;
-        this.isStuffed = isStuffed;
-        this.extraPrice = extraPrice;
+        this.isStuffed = false;
+        this.extraPrice = 0.0;
     }
 
     public String getName() {

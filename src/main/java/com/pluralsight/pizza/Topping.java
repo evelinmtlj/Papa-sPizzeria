@@ -1,13 +1,14 @@
-package com.pluralsight;
+package com.pluralsight.pizza;
 
-public class Sauce {
+public  class Topping {
     private String name;
+    private String category;
     private boolean isPremium;
     private double extraPrice;
 
-
-    public Sauce(String name, boolean isPremium, double extraPrice) {
+    public Topping(String name, String category, boolean isPremium) {
         this.name = name;
+        this.category = category;
         this.isPremium = isPremium;
         this.extraPrice = extraPrice;
     }
@@ -18,6 +19,14 @@ public class Sauce {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public boolean isPremium() {
@@ -36,8 +45,10 @@ public class Sauce {
         this.extraPrice = extraPrice;
     }
 
+
+
     @Override
     public String toString() {
-        return name + (isPremium ? " (Premium)": "");
+        return name + ((isPremium) ? " (Premium) " : "");
     }
 }

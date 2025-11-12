@@ -1,6 +1,6 @@
-package com.pluralsight;
+package com.pluralsight.order;
 
-public class GarlicKnots extends Product{
+public class GarlicKnots extends Product {
 
     public GarlicKnots(int quantity) {
         super("One size",quantity,1.50,"Garlic knots");

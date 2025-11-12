@@ -92,15 +92,17 @@ public class UserInterface {
 
         //build array of sizes
         String[] sizes = {"Personal 8", "Medium 12", "Large 16"};
-        String[] sizeNames = {"Personal", "Medium", "Large"}; //for internal
+        double [] sizePrices = {8.50,12.00,16.50};
+       // String[] sizeNames = {"Personal", "Medium", "Large"}; //for internal
 
         IntStream.range(0, sizes.length)
                 .forEach(i -> System.out.println((i + 1) + " - " + sizes[i]));
 
         int sizeOption = ConsoleHelper.promptForInt("Enter option");
         if (sizeOption < 1 || sizeOption > sizes.length) sizeOption = 1; //default to personal
-        String size = sizeNames[sizeOption - 1]; //to get the correct size
-        System.out.println("Your size is " + size);
+
+        String size = sizes[sizeOption-1];
+        double pizzaPrice = sizePrices[sizeOption-1];
 
         //crust
         String[] crusts = {" Thin", " Regular", " Thick", " Cauliflower"};
@@ -112,7 +114,7 @@ public class UserInterface {
         System.out.println("Your crust is: " + crusts[crustOption - 1]);
 
         //create a pizza
-        Pizza pizza = new Pizza(size, crust);
+        Pizza pizza = new Pizza(size, crust,pizzaPrice);
         //meats
         String[] meats = {"Pepperoni", "Sausage", "Ham", "Bacon", "Chicken", "Meatball"};
         if (ConsoleHelper.promptForYesNo("Add meats?")) {
@@ -221,7 +223,8 @@ public class UserInterface {
             List<Product> products = order.getProducts();
             Collections.reverse(products); //newest
 
-            products.forEach(product -> System.out.println(product.getDescription() + " -$" + product.getPrice()));
+            products.forEach(product ->
+                    System.out.println(product.getDescription() + " -$" + product.getPrice()));
             System.out.println("Total: $" + order.getTotal());
 
             if (ConsoleHelper.promptForYesNo("Confirm order")) {

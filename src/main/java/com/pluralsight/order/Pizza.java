@@ -22,7 +22,7 @@ public class Pizza extends Product {
 
 
 
-    public Pizza(String size, Crust crust) {
+    public Pizza(String size, Crust crust, double basePrice) {
         super(size,1,0.0,"Pizza");
         this.size = size;
         this.crust = crust;

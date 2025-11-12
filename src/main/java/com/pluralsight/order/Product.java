@@ -1,4 +1,4 @@
-package com.pluralsight;
+package com.pluralsight.order;
 
 public  abstract class Product implements OrderItem {
    protected String size;

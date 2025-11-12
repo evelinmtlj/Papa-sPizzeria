@@ -1,11 +1,12 @@
-package com.pluralsight;
+package com.pluralsight.order;
 
-public class Side {
+public class Side extends Product {
     private String name;
     private double price;
 
 
     public Side(String name, double price) {
+        super("N/A",1,price,"side");
         this.name = name;
         this.price = price;
     }

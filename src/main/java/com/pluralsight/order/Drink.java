@@ -1,4 +1,4 @@
-package com.pluralsight;
+package com.pluralsight.order;
 
 public class Drink extends Product {
 
@@ -9,7 +9,7 @@ public class Drink extends Product {
 
     @Override
     public double getPrice() {
-        double pricePerItem = switch (size.toLowerCase()) {
+        double pricePerItem = switch (getSize().toLowerCase()) {
             case "small" -> 2.00;
             case "medium" -> 2.50;
             case "large" -> 3.00;
