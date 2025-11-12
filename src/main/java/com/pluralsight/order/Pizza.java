@@ -1,20 +1,29 @@
-package com.pluralsight;
+package com.pluralsight.order;
 
-import java.awt.image.CropImageFilter;
+import com.pluralsight.pizza.Crust;
+import com.pluralsight.pizza.Sauce;
+import com.pluralsight.pizza.Topping;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Pizza extends Product{
+public class Pizza extends Product {
     private String size;
     private Crust crust;
+    private boolean stuffedCrust = false;
+
     private List<Topping> meatToppings = new ArrayList<>();
     private List<Topping> cheeseToppings = new ArrayList<>();
     private List<Topping> regularToppings = new ArrayList<>();
-    private List<Topping> sauces = new ArrayList<>();
+    private List<Sauce> sauces = new ArrayList<>();
+    private List<Side> sides = new ArrayList<>();
 
-    public Pizza(String size, int quantity, Crust crust) {
-        super(size, quantity, 0,"Pizza");
+
+
+
+    public Pizza(String size, Crust crust) {
+        super(size,1,0.0,"Pizza");
         this.size = size;
         this.crust = crust;
 
@@ -30,8 +39,11 @@ public void addCheeseTopping(Topping topping){
 public void addRegularTopping(Topping topping){
         regularToppings.add(topping);
 }
-public void addSauce(Topping sauce){
+public void addSauce(Sauce sauce){
         sauces.add(sauce);
+}
+public void addSide(Side side){
+        sides.add(side);
 }
 
 
@@ -44,6 +56,18 @@ public void addSauce(Topping sauce){
         }
         for(Topping t: cheeseToppings) {
             price += t.getExtraPrice();
+        }
+        for(Topping t: regularToppings){
+            price += t.getExtraPrice();
+        }
+        for(Sauce s: sauces){
+            price += s.getExtraPrice();
+        }
+        for(Side s: sides){
+            price += s.getPrice();
+        }
+        if(stuffedCrust) {
+            price += 2.0;
         }
        return price * getQuantity();
     }
@@ -63,17 +87,19 @@ public void addSauce(Topping sauce){
     @Override
     public String getDescription(){
         return size + " pizza with " + crust.getName() +
-                " crust, meats: " + listToString(meatToppings) +
+                " crust, stuffed: " +(stuffedCrust ? "yes" : "no") +
+                ", meats: " + listToString(meatToppings) +
                 ", cheeses: " + listToString(cheeseToppings) +
                 ", toppings: " + listToString(regularToppings) +
-                ", sauces: " + listToString(sauces);
+                ", sauces:" + listToString(sauces) +
+                " ,sides:" + listToString(sides);
 
     }
-
-    private String listToString(List<Topping> list) {
+    //convert any list to string
+    private String listToString(List<?> list) {
         if(list.isEmpty()) return "none";
         return list.stream()
-                .map(Topping::getName)
+                .map(Object::toString)
                 .collect(Collectors.joining(", "));
     }
 
