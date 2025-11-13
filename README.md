@@ -3,7 +3,7 @@
   ---------------        Idea Structure          -------------------------------
   <img width="931" height="519" alt="image" src="https://github.com/user-attachments/assets/bb15941f-f683-41dd-a872-17be1a20936a" />
 
-  ## WELCOME TO PAPA'S PIZZAERIA
+  ## WELCOME TO PAPA'S PIZZERIA
  Papa's pizzeria is a ordering system that lets customers build their own pizza by choosing size, crust, sauce cheese and a variety of toppings.
 
  Customers can also add a drink and choose flavor plus add garlic knots to their order.
