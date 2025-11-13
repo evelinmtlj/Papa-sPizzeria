@@ -6,6 +6,11 @@ public class Crust {
     private double extraPrice;
 
 
+
+   public static  String[] crustType = {" Thin", " Regular", " Thick", " Cauliflower"};
+
+
+
     public Crust(String name) {
         this.name = name;
         this.isStuffed = false;

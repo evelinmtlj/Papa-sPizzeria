@@ -93,13 +93,16 @@ public class UserInterface {
 
 //pizza base
         IntStream.range(0, Pizza.pizzaSize.length)
-                .forEach(i -> System.out.println((i + 1) + " - " + Pizza.pizzaSize[i]));
+                .forEach(i -> System.out.printf("%d - %15s $%.2f%n",
+                        (i + 1), Pizza.pizzaSize[i], Pizza.pizzaPrice[i]));
 
         int sizeOption = ConsoleHelper.promptForInt("ENTER OPTION");
         if (sizeOption < 1 || sizeOption > Pizza.pizzaSize.length) sizeOption = 1; //default to personal
 
         String size = Pizza.pizzaSize[sizeOption-1];
         double pizzaPrice = Pizza.pizzaPrice[sizeOption-1];
+
+        String sizeWord = size.split(" ")[0].toLowerCase();
 
         //crust
 
@@ -110,9 +113,15 @@ public class UserInterface {
         Crust crust = new Crust(Crust.crustType[crustOption - 1]);
         System.out.println("Your crust is: " + Crust.crustType[crustOption - 1]);
 
-        //create a pizza
-        Pizza pizza = new Pizza(size, crust,pizzaPrice);
+        //ask about stuffed crust
+        boolean stuffedCrust = ConsoleHelper.promptForYesNo("Stuffed crust for (+$2.00)");
 
+        //create a pizza
+        Pizza pizza = new Pizza(sizeWord, crust,pizzaPrice);
+        //set stuffed
+        if(stuffedCrust) {
+            pizza.setStuffedCrust(true);
+        }
         //meats
         if (ConsoleHelper.promptForYesNo("ADD MEATS ?")) {
             System.out.println("****** AVAILABLE MEATS *********");
@@ -120,15 +129,20 @@ public class UserInterface {
                     .forEach(i -> System.out.println((i+1) + " - " + Pizza.meats[i]));
 
             while (true) {
-                int choice = ConsoleHelper.promptForInt(("Enter meat type (0 when you're done"));
+                int choice = ConsoleHelper.promptForInt(("Enter meat type (0 when you're done)"));
                 if (choice == 0) break;
                 if(choice <1 || choice > Pizza.meats.length){
                     System.out.println("Meat type not found please try again");
                     continue;
                 }
                 String meatName = Pizza.meats[choice-1];
-                pizza.addMeatTopping(new Topping(meatName,"meats",false));
                 System.out.println(meatName + " has been added");
+                //ask for extra meat?
+                boolean isExtra = ConsoleHelper.promptForYesNo("Want to add extra " + meatName + "?");
+                String category = isExtra ? "extra meat" : "meat";
+
+                pizza.addMeatTopping(new Topping(meatName,category,true,pizza.getSize()));
+
             }
         }
         //sauces
@@ -141,15 +155,20 @@ public class UserInterface {
             IntStream.range(0, Pizza.cheeseTypes.length)
                     .forEach(i -> System.out.println((i+1) + " - " + Pizza.cheeseTypes[i]));
             while(true) {
-                int choice = ConsoleHelper.promptForInt(("Enter cheese type (0 when you're done"));
+                int choice = ConsoleHelper.promptForInt(("Enter cheese type (0 when you're done)"));
                 if(choice ==0) break;
                 if(choice<1 || choice > Pizza.cheeseTypes.length) {
                     System.out.println("Cheese type not found please try again");
                     continue;
                 }
                 String cheeseName = Pizza.cheeseTypes[choice - 1];
-                pizza.addCheeseTopping(new Topping(cheeseName, "regular", false));
-                System.out.println(cheeseName + " has been added ");
+                System.out.println(cheeseName + " has been added");
+                //ask for extra cheese
+                boolean isExtra = ConsoleHelper.promptForYesNo("Want to add extra " + cheeseName + "?");
+                String category = isExtra ? "extra cheese" : "cheese";
+
+                pizza.addCheeseTopping(new Topping(cheeseName, category, true,pizza.getSize()));
+
             }
 
                     // prompt use to select cheeses by number
@@ -166,7 +185,6 @@ public class UserInterface {
 //
 //                    .filter(i -> ConsoleHelper.promptForYesNo("Add " + Pizza.cheeseTypes[i] + "?"))
 //
-
         //regular toppings
         if (ConsoleHelper.promptForYesNo("Add regular toppings?")) {
             System.out.println("\n********** AVAILABLE TOPPINGS ********");
@@ -183,13 +201,11 @@ public class UserInterface {
                 }
 
                 String toppingName = Topping.regulars[choice - 1];
-                pizza.addRegularTopping(new Topping(toppingName, "regular", false));
+                pizza.addRegularTopping(new Topping(toppingName, "regular", false,pizza.getSize()));
                 System.out.println(toppingName + " has been added ");
             }
         }
-
         //Sauces
-
         if (ConsoleHelper.promptForYesNo("Add sauces?")) {
             System.out.println("\nAVAILABLE SAUCES ");
             for (int i = 0; i < Sauce.sauceOptions.length; i++) {
@@ -208,18 +224,22 @@ public class UserInterface {
                 System.out.println(sauceName + " has been added!");
             }
             //sides
-            String[] sides = {"Red Pepper", "Parmesan"};
-            double[] sidePrices = {0.50, 0.50};
 
             if (ConsoleHelper.promptForYesNo("Add sides?")) {
-                IntStream.range(0, sides.length)
-                        .filter(i -> ConsoleHelper.promptForYesNo("Add" + sides[i] + "?"))
-                        .forEach(i -> pizza.addSide(new Side(sides[i], sidePrices[i])));
+                System.out.println("********* Available sides ***********");
+                IntStream.range(0,Topping.sides.length)
+                        .forEach(i -> System.out.println((i+1) + " - " + Topping.sides[i]));
+
+                for(int i = 0; i < Topping.sides.length; i++) {
+                    if(ConsoleHelper.promptForYesNo("Add " + Topping.sides[i] + "?")) {
+                        pizza.addSide(new Topping(Topping.sides[i],"side",false, pizza.getSize() ));
+                    }
+                }
             }
-            //add pizza to order
-            order.addProduct(pizza);
-            System.out.println("Pizza has been added to order");
-        }
+
+        }  //add pizza to order
+        order.addProduct(pizza);
+        System.out.println("Pizza has been added to order");
     }
         private void addDrink () {
             System.out.println("***** Add a drink ******");
@@ -241,7 +261,7 @@ public class UserInterface {
 
             GarlicKnots knots = new GarlicKnots(gty);
             order.addProduct(knots);
-            System.out.println(gty + "Garlic knots added to your order");
+            System.out.println(gty + " Garlic knots added to your order");
 
         }
         private void checkOut () {
@@ -249,22 +269,48 @@ public class UserInterface {
                 System.out.println("Your order is empty : Cannot checkout");
                 return;
             }
-            System.out.println("\n ──────────────── ⋆⋅Your ☆ Order⋅⋆ ──────────────────");
-            List<Product> products = order.getProducts();
-            Collections.reverse(products); //newest
 
-            products.forEach(product ->
-                    System.out.println(product.getDescription() + " -$" + product.getPrice()));
-            System.out.println("Total: $" + order.getTotal());
+            //check if order has no pizzas
+            boolean hasPizza= false;
+            boolean hasGarlicKnots = false;
+            boolean hasDrink = false;
 
-            if (ConsoleHelper.promptForYesNo("Confirm order")) {
-                order.saveReceipt();
-                System.out.println("Order Complete.....");
-                order = null;
-            } else {
-                System.out.println("Order canceled.... returning");
-                order = null;
+            for(Product p: order.getProducts()) {
+                if(p instanceof  Pizza) hasPizza = true;
+                if(p.getDescription().equalsIgnoreCase("Garlic Knots")) hasGarlicKnots = true;
+                if(p instanceof Drink) hasDrink = true;
             }
+            order.displayOrder();
+
+            //ask for confirmation
+            boolean confirm = ConsoleHelper.promptForYesNo("Would you like to proceed n: to cancel ");
+            if(confirm) {
+                order.saveReceipt();
+                System.out.println("Thank you for your purchase! Order has been saved");
+                //to clear
+                order.clearOrder();
+            } else {
+                System.out.println("Order canceled");
+            }
+
+
+//            System.out.println("\n ──────────────── ⋆⋅Your ☆ Order⋅⋆ ──────────────────");
+//
+//            List<Product> products = order.displayOrder();
+//           // Collections.reverse(products); //newest
+//
+//            products.forEach(product ->
+//                    System.out.println(product.getDescription() + " -$" + product.getPrice()));
+//            System.out.println("Total: $" + order.getTotal());
+//
+//            if (ConsoleHelper.promptForYesNo("Confirm order")) {
+//                order.saveReceipt();
+//                System.out.println("Order Complete.....");
+//                order = null;
+//            } else {
+//                System.out.println("Order canceled.... returning");
+//                order = null;
+//            }
 
         }
     }

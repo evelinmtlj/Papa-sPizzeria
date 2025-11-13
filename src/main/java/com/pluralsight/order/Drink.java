@@ -3,6 +3,9 @@ package com.pluralsight.order;
 public class Drink extends Product {
 
 
+    public static String [] drinkSize = {"Small", "Medium", "Large"};
+    public static double [] priceDrink = {2.00, 2.50, 3.00};
+
     public Drink(String size, int quantity, double price, String description) {
         super(size, quantity, price, description);
     }

@@ -10,6 +10,8 @@ public  class Topping {
 
     public static  String[] regulars = {"Onions", "Mushrooms", "Bell Peppers", "Olives", "Tomatoes", "Spinach",
             "Basil", "Pineapple", "Anchovies"};
+    //sides array
+    public static String[] sides = {"Red pepper", "Parmesan"};
 
     public Topping(String name, String category, boolean isPremium, String pizzaSize) {
         this.name = name;
@@ -81,6 +83,8 @@ public  class Topping {
                     case "large" -> 0.90;
                     default -> 0.0;
                 };
+            case "side":
+            return 0;
             case "regular":
             default:
                 return 0.0; //regulars are free

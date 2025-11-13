@@ -17,8 +17,13 @@ public class Pizza extends Product {
     private List<Topping> cheeseToppings = new ArrayList<>();
     private List<Topping> regularToppings = new ArrayList<>();
     private List<Sauce> sauces = new ArrayList<>();
-    private List<Side> sides = new ArrayList<>();
+    private List<Topping> sides = new ArrayList<>();
 
+
+    public static String[] cheeseTypes = {"Mozzarella", "Parmesan", " Ricotta", "Goat Cheese", "Buffalo"};
+    public static String[] pizzaSize =  {"Personal 8", "Medium 12", "Large 16"};
+   public static double [] pizzaPrice =  {8.50,12.00,16.50};
+   public static String[] meats =  {"Pepperoni", "Sausage", "Ham", "Bacon", "Chicken", "Meatball"};
 
 
 
@@ -27,6 +32,13 @@ public class Pizza extends Product {
         this.size = size;
         this.crust = crust;
 
+    }
+    public String getSize(){
+        return size;
+    }
+
+    public void setStuffedCrust(boolean stuffedCrust) {
+        this.stuffedCrust = stuffedCrust;
     }
 
     //add topping and sauces
@@ -42,8 +54,8 @@ public void addRegularTopping(Topping topping){
 public void addSauce(Sauce sauce){
         sauces.add(sauce);
 }
-public void addSide(Side side){
-        sides.add(side);
+public void addSide(Topping topping){
+       sides.add(topping);
 }
 
 
@@ -63,8 +75,8 @@ public void addSide(Side side){
         for(Sauce s: sauces){
             price += s.getExtraPrice();
         }
-        for(Side s: sides){
-            price += s.getPrice();
+        for(Topping t : sides){
+            price += t.getExtraPrice();
         }
         if(stuffedCrust) {
             price += 2.0;
@@ -86,25 +98,47 @@ public void addSide(Side side){
 
     @Override
     public String getDescription(){
-        return size + " pizza with " + crust.getName() +
-                " crust, stuffed: " +(stuffedCrust ? "yes" : "no") +
-                ", meats: " + listToString(meatToppings) +
-                ", cheeses: " + listToString(cheeseToppings) +
-                ", toppings: " + listToString(regularToppings) +
-                ", sauces:" + listToString(sauces) +
-                " ,sides:" + listToString(sides);
 
+        StringBuilder rFormat = new StringBuilder();
+
+        //header
+        rFormat.append(String.format("%-40s Qty: %d\n", size.toUpperCase() + "PIZZA", getQuantity()));
+        rFormat.append("✦·┈๑⋅⋯ ⋯⋅๑┈·✦✦·┈๑⋅⋯ ⋯⋅๑┈·✦✦·┈๑⋅⋯ ⋯⋅๑┈·✦✦·┈๑⋅⋯ ⋯⋅๑┈·✦\n");
+
+        //base
+        rFormat.append(String.format(" %-38s $%.2f\n", crust.getName() + " Crust", getBasePriceBySize()));
+
+        //toppings with prices
+        for(Topping t: meatToppings) {
+            rFormat.append(String.format("   + %-35s$%.2f\n", t.getName(),t.getExtraPrice()));
+        }
+        for(Topping t: cheeseToppings) {
+            rFormat.append(String.format("   + %-35s $%.2f\n", t.getName(), t.getExtraPrice()));
+        }
+        for(Topping t : regularToppings) {
+            if(t.getExtraPrice() > 0) {
+                rFormat.append(String.format("   + %-35s  $%.2f\n", t.getName(), t.getExtraPrice()));
+            } else {
+                rFormat.append(String.format("   + %-35s FREE\n", t.getName()));
+            }
+        }
+        for(Sauce s : sauces){
+            rFormat.append(String.format("   + %-35s  FREE\n", s.getName() + " Sauce"));
+        }
+        for(Topping t : sides) {
+            rFormat.append(String.format("   + %-35s  FREE\n", t.getName() + " (side)"));
+        }
+        if(stuffedCrust) {
+            rFormat.append(String.format("   + %-35s $%.2f\n", "Stuffed Crust", 2.00));
+        }
+        rFormat.append("✦·┈๑⋅⋯ ⋯⋅๑┈·✦✦·┈๑⋅⋯ ⋯⋅๑┈·✦✦·┈✦·┈๑⋅⋯ ⋯⋅๑┈·✦๑⋅⋯ ⋯⋅๑┈·✦\n");
+        rFormat.append(String.format("%-40s $%.2f\n", "SUBTOTAL:", getPrice()));
+        return rFormat.toString();
     }
-    //convert any list to string
-    private String listToString(List<?> list) {
-        if(list.isEmpty()) return "none";
-        return list.stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
+    @Override
+    public String toString() {
+        return "Pizza{" +
+                "size='" + size + '\'' +
+                '}';
     }
-
-
-
-
-
 }

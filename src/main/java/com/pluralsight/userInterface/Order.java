@@ -35,16 +35,24 @@ public class Order {
     }
 
     public void displayOrder() {
-        System.out.println("\n✦•┈๑⋅⋯ ⋯⋅๑┈•✦✦•┈๑⋅⋯ ⋯⋅๑┈•✦ Order Total ✦•┈๑⋅⋯ ⋯⋅๑┈•✦✦•┈๑⋅⋯ ⋯⋅๑┈•✦");
-
-        products.forEach(product ->
-                System.out.println(product.getQuantity() +
-                        " x " + product.getDescription() +
-                        " - $" + String.format("%.2f", product.getPrice())));
+        System.out.println("\n ──────────────────⋆⋅Your ☆ Order⋅⋆──────────────────── ");
 
 
-        System.out.println("✦•┈๑⋅⋯ ⋯⋅๑┈•✦✦•┈๑⋅⋯ ⋯⋅๑┈•✦✦•┈๑⋅⋯ ⋯⋅๑┈•✦✦•┈๑⋅⋯ ⋯⋅๑┈•✦✦•┈๑⋅⋯ ⋯⋅๑┈•✦✦•┈๑");
+        products.forEach(product -> {
+                    String line = String.format("%d  x %s  - $%.2f",
+                            product.getQuantity(),
+                            product.getDescription(),
+                            product.getPrice());
+            System.out.println("  " + line);
+        });
+
+        System.out.println("──────────────────────────────────────────────────────");
         System.out.println("Total: $" + String.format("%.2f", getTotal()));
+    }
+
+    public void clearOrder(){
+        products.clear();
+        ordertime = LocalDateTime.now();
     }
 
     public void saveReceipt() {
@@ -68,7 +76,8 @@ public class Order {
     public String toString() {
         StringBuilder receipt = new StringBuilder();
         receipt.append("\n════════════════════════════ Papa's Pizzeria⋆⋅☆⋅⋆ Receipt ════════════════════════════\n");
-        receipt.append("Order time: ").append(ordertime).append("\n");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd - HH:mm:ss");
+        receipt.append("Order time: ").append(ordertime.format(formatter)).append("\n");
         receipt.append("─────────────────────────────────────────────────────────────────────────────────────\n\n");
 
         //list all items

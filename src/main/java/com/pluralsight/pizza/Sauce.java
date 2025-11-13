@@ -5,6 +5,8 @@ public class Sauce {
     private boolean isPremium;
     private double extraPrice;
 
+    public static String[] sauceOptions = {"Marinara", "Alfredo", "Pesto", "BBQ", "Buffalo", "Olive oil"};
+
 
     public Sauce(String name) {
         this.name = name;
