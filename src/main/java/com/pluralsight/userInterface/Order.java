@@ -2,7 +2,6 @@ package com.pluralsight.userInterface;
 
 import com.pluralsight.order.Product;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -36,7 +35,7 @@ public class Order {
     }
 
     public void displayOrder() {
-        System.out.println("\n ---------- Order total -------");
+        System.out.println("\n✦•┈๑⋅⋯ ⋯⋅๑┈•✦✦•┈๑⋅⋯ ⋯⋅๑┈•✦ Order Total ✦•┈๑⋅⋯ ⋯⋅๑┈•✦✦•┈๑⋅⋯ ⋯⋅๑┈•✦");
 
         products.forEach(product ->
                 System.out.println(product.getQuantity() +
@@ -44,7 +43,7 @@ public class Order {
                         " - $" + String.format("%.2f", product.getPrice())));
 
 
-        System.out.println("------------------------------");
+        System.out.println("✦•┈๑⋅⋯ ⋯⋅๑┈•✦✦•┈๑⋅⋯ ⋯⋅๑┈•✦✦•┈๑⋅⋯ ⋯⋅๑┈•✦✦•┈๑⋅⋯ ⋯⋅๑┈•✦✦•┈๑⋅⋯ ⋯⋅๑┈•✦✦•┈๑");
         System.out.println("Total: $" + String.format("%.2f", getTotal()));
     }
 
@@ -57,19 +56,31 @@ public class Order {
         String fileName = "receipts/" + time + ".txt"; //create file name
 
         try(FileWriter writer = new FileWriter(fileName)){
-            writer.write(" ────────────────────────────────── Papa's Pizzeria⋆⋅☆⋅⋆ Receipt ──────────────────");
-            writer.write("Oder time: " + time );
-
-            //
             writer.write(this.toString());
-
-            writer.write("\n  ─────────────────────────────────────────⋆⋅☆⋅⋆ ────────────────────────────────");
             System.out.println("Receipt saved to: " + fileName);
         } catch (IOException e) {
             System.out.println("Error saving receipt");
         }
 
+    }
 
+    @Override
+    public String toString() {
+        StringBuilder receipt = new StringBuilder();
+        receipt.append("\n════════════════════════════ Papa's Pizzeria⋆⋅☆⋅⋆ Receipt ════════════════════════════\n");
+        receipt.append("Order time: ").append(ordertime).append("\n");
+        receipt.append("─────────────────────────────────────────────────────────────────────────────────────\n\n");
+
+        //list all items
+        for (Product p : products) {
+            receipt.append(p.getDescription()).append("\n");
+            receipt.append(String.format("Price: $%.2f\n\n", p.getPrice()));
+        }
+        receipt.append("─────────────────────────────────────────────────────────────────────────────────────\n");
+        receipt.append(String.format("Total: $%.2f\n", getTotal()));
+        receipt.append("═════════════════════════════════════════════════════════════════════════════════════\n");
+
+        return receipt.toString();
     }
 }
 
