@@ -12,5 +12,16 @@ public class GarlicKnots extends Product {
         return pricePerItem * quantity;
     }
 
+    @Override
+    public String getDescription(){
+        StringBuilder garlicFormat = new StringBuilder();
+
+       garlicFormat.append(String.format("%-35s Qty: %-3d $%.2f\n",
+               "Garlic Knots", getQuantity(), getPrice()));
+
+        return garlicFormat.toString();
+
+    }
+
 
 }
