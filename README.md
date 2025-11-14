@@ -8,7 +8,7 @@
 
  Once customer is done they can checkout and a receipt is printed out that lists all the items they got plus the prices.
                         
-                              ---------------------------------       Idea Structure          -------------------------------
+             ---------------------------------       Idea Structure          -------------------------------
 
  <img width="955" height="548" alt="image" src="https://github.com/user-attachments/assets/34748940-2c88-4a13-9105-af2ff4497098" />
 
