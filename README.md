@@ -1,7 +1,8 @@
 # Papa-sPizzeria
 <img width="320" height="200" alt="image" src="https://github.com/user-attachments/assets/2940e849-999b-4354-9cde-31d723e1cb99" />
   ---------------        Idea Structure          -------------------------------
- <img width="942" height="545" alt="image" src="https://github.com/user-attachments/assets/75b00c24-79e9-4bcb-aea8-892451c4b82d" />
+<img width="955" height="548" alt="image" src="https://github.com/user-attachments/assets/34748940-2c88-4a13-9105-af2ff4497098" />
+
 
 
   ## WELCOME TO PAPA'S PIZZERIA
